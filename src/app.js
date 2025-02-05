@@ -11,6 +11,8 @@ const app = express();
 app.use(express.json());
 routes(app);
 
-export default app;
+app.use((erro, req, res, next) => {
+  res.status(500).json({ message: "Erro interno no servidor" });
+});
 
-// mongodb+srv://admin: admin123@cluster0.uvmwiwx.mongodb.net/?retryWrites=true&w=majority
+export default app;

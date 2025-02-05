@@ -7,21 +7,25 @@ class AutorController {
 
       res.status(200).json(autoresResultado);
     } catch (erro) {
-      res.status(500).json({ message: "Erro interno no servidor" });
+      res
+        .status(500)
+        .json({ message: "Erro interno no servidor", erro: erro.message });
     }
   };
 
-  static listarAutorPorId = async (req, res) => {
+  static listarAutorPorId = async (req, res, next) => {
     try {
       const id = req.params.id;
 
       const autorResultado = await autores.findById(id);
 
-      res.status(200).send(autorResultado);
+      if (autorResultado) {
+        res.status(200).send(autorResultado);
+      } else {
+        res.status(404).send({ message: "Id do Autor não localizado." });
+      }
     } catch (erro) {
-      res
-        .status(400)
-        .send({ message: `${erro.message} - Id do Autor não localizado.` });
+      next(erro);
     }
   };
 
